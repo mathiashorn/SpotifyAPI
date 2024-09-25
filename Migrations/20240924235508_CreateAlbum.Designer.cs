@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SpotifyAPI.Models;
@@ -11,9 +12,11 @@ using SpotifyAPI.Models;
 namespace SpotifyAPI.Migrations
 {
     [DbContext(typeof(SpotifyDbContext))]
-    partial class SpotifyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240924235508_CreateAlbum")]
+    partial class CreateAlbum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,8 +28,6 @@ namespace SpotifyAPI.Migrations
             modelBuilder.HasSequence("albums_seq");
 
             modelBuilder.HasSequence("artists_seq");
-
-            modelBuilder.HasSequence("songs_seq");
 
             modelBuilder.HasSequence("users_seq");
 
@@ -86,50 +87,6 @@ namespace SpotifyAPI.Migrations
                     b.ToTable("artists", (string)null);
                 });
 
-            modelBuilder.Entity("SpotifyAPI.Models.Song", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("nextval('songs_seq'::regclass)");
-
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ArtistId")
-                        .HasColumnType("integer")
-                        .HasColumnName("artist_id");
-
-                    b.Property<bool?>("Deleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("deleted");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer")
-                        .HasColumnName("duration");
-
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("genre");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
-
-                    b.HasIndex("ArtistId");
-
-                    b.ToTable("songs", (string)null);
-                });
-
             modelBuilder.Entity("SpotifyAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -183,37 +140,9 @@ namespace SpotifyAPI.Migrations
                     b.Navigation("Artist");
                 });
 
-            modelBuilder.Entity("SpotifyAPI.Models.Song", b =>
-                {
-                    b.HasOne("SpotifyAPI.Models.Album", "Album")
-                        .WithMany("Songs")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_album");
-
-                    b.HasOne("SpotifyAPI.Models.Artist", "Artist")
-                        .WithMany("Songs")
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_artist");
-
-                    b.Navigation("Album");
-
-                    b.Navigation("Artist");
-                });
-
-            modelBuilder.Entity("SpotifyAPI.Models.Album", b =>
-                {
-                    b.Navigation("Songs");
-                });
-
             modelBuilder.Entity("SpotifyAPI.Models.Artist", b =>
                 {
                     b.Navigation("Albums");
-
-                    b.Navigation("Songs");
                 });
 #pragma warning restore 612, 618
         }

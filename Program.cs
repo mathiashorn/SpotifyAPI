@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SpotifyAPI.Models;
+using SpotifyAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<UserService>();
+
 var app = builder.Build();
+
+// Database migration
+using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var context = serviceScope.ServiceProvider.GetService<SpotifyDbContext>();
+    context.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

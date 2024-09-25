@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SpotifyAPI.Models;
@@ -11,9 +12,11 @@ using SpotifyAPI.Models;
 namespace SpotifyAPI.Migrations
 {
     [DbContext(typeof(SpotifyDbContext))]
-    partial class SpotifyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240925000322_CreateSong")]
+    partial class CreateSong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,8 +126,6 @@ namespace SpotifyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlbumId");
-
                     b.HasIndex("ArtistId");
 
                     b.ToTable("songs", (string)null);
@@ -187,7 +188,7 @@ namespace SpotifyAPI.Migrations
                 {
                     b.HasOne("SpotifyAPI.Models.Album", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("AlbumId")
+                        .HasForeignKey("ArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_album");

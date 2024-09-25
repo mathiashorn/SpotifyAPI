@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SpotifyAPI.Models;
+using SpotifyAPI.Services;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +13,14 @@ namespace SpotifyAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+
+        private UserService _userService;
+
+        public UsersController(UserService userService)
+        {
+            _userService = userService;
+        }
+
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -17,15 +30,16 @@ namespace SpotifyAPI.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<User>> Get(int id)
         {
-            return "value";
+            return Ok(await _userService.GetUser(id));
         }
 
-        // POST api/<UsersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post(User user)
         {
+            await _userService.CreateUser(user);
+            return Ok();
         }
 
         // PUT api/<UsersController>/5

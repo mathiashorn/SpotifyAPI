@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SpotifyAPI.Models;
@@ -11,9 +12,11 @@ using SpotifyAPI.Models;
 namespace SpotifyAPI.Migrations
 {
     [DbContext(typeof(SpotifyDbContext))]
-    partial class SpotifyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240925001254_CreateSong2")]
+    partial class CreateSong2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
