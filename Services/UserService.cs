@@ -36,11 +36,15 @@ namespace SpotifyAPI.Services
             }
         }
 
-        public async Task DeleteUser(User user)
+        public async Task DeleteUser(int id)
         {
-            _context.Entry(user).State = EntityState.Modified;
-            user.Deleted = true;
-            await _context.SaveChangesAsync();
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Entry(user).State = EntityState.Modified;
+                user.Deleted = true;
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task EditUser(User user)
@@ -99,6 +103,19 @@ namespace SpotifyAPI.Services
             {
                 return null;
             }
+        }
+
+        public bool IsValidUser(User user, out string message)
+        {
+            message = "";
+
+            if (!user.Email.Contains("@"))
+            {
+                message = "Email inválido";
+                return false;
+            }
+
+            return true;
         }
 
     }

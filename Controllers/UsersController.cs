@@ -23,14 +23,14 @@ namespace SpotifyAPI.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<List<User>>> Get(int id)
         {
-            return new string[] { "value1", "value2" };
+            return Ok(await _userService.GetUsers());
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int id)
+        public async Task<ActionResult<User>> GetById(int id)
         {
             return Ok(await _userService.GetUser(id));
         }
@@ -38,20 +38,43 @@ namespace SpotifyAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(User user)
         {
+            var message = "";
+            if (!_userService.IsValidUser(user, out message))
+            {
+                return BadRequest(message);
+            }
+
             await _userService.CreateUser(user);
             return Ok();
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, User user)
         {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            var message = "";
+            if (!_userService.IsValidUser(user, out message))
+            {
+                return BadRequest(message);
+            }
+
+            await _userService.EditUser(user);
+
+            return Ok();
+
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _userService.DeleteUser(id);
+            return Ok();
         }
     }
 }
