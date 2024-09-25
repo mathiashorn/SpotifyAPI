@@ -7,10 +7,13 @@
         public int Duration { get; set; }
         public int ArtistId { get; set; }
         public string Genre { get; set; }
-        public Artist Artist { get; set; }
         public int AlbumId { get; set; }
-        public Album Album { get; set; }
         public bool? Deleted { get; set; }
+
+        public virtual Artist? Artist { get; set; }
+        public virtual Album? Album { get; set; }
+
+
     }
 
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SpotifyAPI.Models;
 using SpotifyAPI.Services;
+using SpotifyAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ArtistService>();
+builder.Services.AddScoped<AlbumService>();
 builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
