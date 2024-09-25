@@ -36,6 +36,7 @@ namespace SpotifyAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(Album album)
         {
             var message = "";
